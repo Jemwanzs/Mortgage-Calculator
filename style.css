@@ -79,6 +79,18 @@
     color: #fff;
 }
 
+form .Title1 {
+    font-size: 15px;
+    color: aqua;
+    font-style: italic;
+}
+
+form .Title {
+    font-size: 10px;
+    color: aqua;
+    font-style: italic;
+}
+
 .Results h2 {
     margin-bottom: 10px;
 }
