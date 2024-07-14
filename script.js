@@ -1,32 +1,57 @@
-function calculateMortgage() {
-    // Get input values
-    const homePrice = parseFloat(document.getElementById('homePrice').value);
-    const downPayment = parseFloat(document.getElementById('downPayment').value);
-    const loanTerm = parseInt(document.getElementById('loanTerm').value);
-    const interestRate = parseFloat(document.getElementById('interestRate').value) / 100;
-    const taxRate = parseFloat(document.getElementById('taxRate').value) / 100;
-    const insurance = parseFloat(document.getElementById('insurance').value);
-    const otherCosts = parseFloat(document.getElementById('otherCosts').value);
+function formatNumberInput(input) {
+    // Get input value and remove non-numeric characters
+    let value = input.value.replace(/\D/g, '');
 
-    // Calculate monthly values
+    // Format the value with commas for thousands separator
+    input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    // If input is empty, set value to empty string
+    if (input.value === '') {
+        input.value = '';
+    }
+}
+
+function calculateMortgage() {
+    // Set initial values to 'NaN'
+    document.getElementById('homeCost').textContent = 'NaN';
+    document.getElementById('downPaymentAmt').textContent = 'NaN';
+    document.getElementById('loanAmount').textContent = 'NaN';
+    document.getElementById('monthlyPayment').textContent = 'NaN';
+    document.getElementById('MortgageAmount').textContent = 'NaN';
+    document.getElementById('interestAmount').textContent = 'NaN';
+
+    // Get input values
+    const homePrice = parseFloat(document.getElementById('homePrice').value.replace(/,/g, ''));
+    const downPaymentPercent = parseFloat(document.getElementById('downPayment').value.replace(/,/g, ''));
+    const loanTerm = parseInt(document.getElementById('loanTerm').value.replace(/,/g, ''));
+    const interestRate = parseFloat(document.getElementById('interestRate').value.replace(/,/g, ''));
+
+    // Validate percentages
+    if (downPaymentPercent > 100 || interestRate > 100) {
+        alert("Downpayment and Interest Rate should not exceed 100%");
+        return;
+    }
+    // Convert percentages to decimal
+    const downPaymentDecimal = downPaymentPercent / 100;
+    const interestRateDecimal = interestRate / 100;
+
+    // Calculate values
+    const downPayment = homePrice * downPaymentDecimal;
     const loanAmount = homePrice - downPayment;
     const numberOfMonths = loanTerm * 12;
-    const monthlyInterestRate = interestRate / 12;
+    const monthlyInterestRate = interestRateDecimal / 12;
 
     const mortgagePayment = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numberOfMonths));
-    const taxAmountMonthly = (mortgagePayment * taxRate);
-    const insuranceCostMonthly = insurance;
-    const otherCostsMonthly = otherCosts;
+    const MortgageAmount = mortgagePayment * numberOfMonths;
+    const interestAmount = MortgageAmount - loanAmount;
 
-    const totalMonthlyPayment = mortgagePayment + taxAmountMonthly + insuranceCostMonthly + otherCostsMonthly;
-    const totalCost = totalMonthlyPayment * numberOfMonths;
-
-    // Display results
-    document.getElementById('monthlyPayment').textContent = mortgagePayment.toFixed(2);
-    document.getElementById('taxAmountMonthly').textContent = taxAmountMonthly.toFixed(2);
-    document.getElementById('insuranceCostMonthly').textContent = insuranceCostMonthly.toFixed(2);
-    document.getElementById('otherCostsMonthly').textContent = otherCostsMonthly.toFixed(2);
-    document.getElementById('totalCost').textContent = totalCost.toFixed(2);
+    // Display results with thousands separators
+    document.getElementById('homeCost').textContent = homePrice.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    document.getElementById('downPaymentAmt').textContent = downPayment.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    document.getElementById('loanAmount').textContent = loanAmount.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    document.getElementById('monthlyPayment').textContent = mortgagePayment.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    document.getElementById('MortgageAmount').textContent = MortgageAmount.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    document.getElementById('interestAmount').textContent = interestAmount.toLocaleString('en-US', { maximumFractionDigits: 2 });
 
     // Show results
     document.getElementById('results').style.display = 'block';
