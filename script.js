@@ -1,58 +1,145 @@
-function formatNumberInput(input) {
-    // Get input value and remove non-numeric characters
-    let value = input.value.replace(/\D/g, '');
-
-    // Format the value with commas for thousands separator
-    input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-    // If input is empty, set value to empty string
-    if (input.value === '') {
-        input.value = '';
-    }
-}
-
+// Function to calculate mortgage details
 function calculateMortgage() {
-    // Set initial values to 'NaN'
-    document.getElementById('homeCost').textContent = 'NaN';
-    document.getElementById('downPaymentAmt').textContent = 'NaN';
-    document.getElementById('loanAmount').textContent = 'NaN';
-    document.getElementById('monthlyPayment').textContent = 'NaN';
-    document.getElementById('MortgageAmount').textContent = 'NaN';
-    document.getElementById('interestAmount').textContent = 'NaN';
+    // Clear previous results
+    clearResults();
 
     // Get input values
-    const homePrice = parseFloat(document.getElementById('homePrice').value.replace(/,/g, ''));
-    const downPaymentPercent = parseFloat(document.getElementById('downPayment').value.replace(/,/g, ''));
-    const loanTerm = parseInt(document.getElementById('loanTerm').value.replace(/,/g, ''));
-    const interestRate = parseFloat(document.getElementById('interestRate').value.replace(/,/g, ''));
+    const homePrice = getInputFloatValue('homePrice');
+    const downPaymentPercent = getInputFloatValue('downPayment');
+    const loanTerm = getInputIntValue('loanTerm');
+    const interestRate = getInputFloatValue('interestRate');
+
+    // Validate inputs
+    if (isNaN(homePrice) || isNaN(downPaymentPercent) || isNaN(loanTerm) || isNaN(interestRate)) {
+        alert('Please enter valid numeric inputs.');
+        return;
+    }
 
     // Validate percentages
     if (downPaymentPercent > 100 || interestRate > 100) {
         alert("Downpayment and Interest Rate should not exceed 100%");
         return;
     }
+
     // Convert percentages to decimal
     const downPaymentDecimal = downPaymentPercent / 100;
     const interestRateDecimal = interestRate / 100;
 
-    // Calculate values
+    // Calculate mortgage details
     const downPayment = homePrice * downPaymentDecimal;
     const loanAmount = homePrice - downPayment;
     const numberOfMonths = loanTerm * 12;
     const monthlyInterestRate = interestRateDecimal / 12;
 
-    const mortgagePayment = (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numberOfMonths));
+    const mortgagePayment = calculateMonthlyPayment(loanAmount, monthlyInterestRate, numberOfMonths);
     const MortgageAmount = mortgagePayment * numberOfMonths;
     const interestAmount = MortgageAmount - loanAmount;
 
-    // Display results with thousands separators
-    document.getElementById('homeCost').textContent = homePrice.toLocaleString('en-US', { maximumFractionDigits: 2 });
-    document.getElementById('downPaymentAmt').textContent = downPayment.toLocaleString('en-US', { maximumFractionDigits: 2 });
-    document.getElementById('loanAmount').textContent = loanAmount.toLocaleString('en-US', { maximumFractionDigits: 2 });
-    document.getElementById('monthlyPayment').textContent = mortgagePayment.toLocaleString('en-US', { maximumFractionDigits: 2 });
-    document.getElementById('MortgageAmount').textContent = MortgageAmount.toLocaleString('en-US', { maximumFractionDigits: 2 });
-    document.getElementById('interestAmount').textContent = interestAmount.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    // Display results
+    displayResults({
+        homeCost: homePrice,
+        downPaymentAmt: downPayment,
+        loanAmount: loanAmount,
+        monthlyPayment: mortgagePayment,
+        MortgageAmount: MortgageAmount,
+        interestAmount: interestAmount
+    });
 
-    // Show results
-    document.getElementById('results').style.display = 'block';
+    // Show results and scroll to them
+    const resultsElement = document.getElementById('results');
+    resultsElement.style.display = 'block';
+    resultsElement.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Function to calculate monthly mortgage payment
+function calculateMonthlyPayment(loanAmount, monthlyInterestRate, numberOfMonths) {
+    return (loanAmount * monthlyInterestRate) / (1 - Math.pow(1 + monthlyInterestRate, -numberOfMonths));
+}
+
+// Function to generate amortization table
+function generateAmortizationTable() {
+    // Ensure mortgage calculation is done before generating amortization
+    const monthlyPaymentText = document.getElementById('monthlyPayment').textContent.trim();
+    if (monthlyPaymentText === 'NaN') {
+        alert('Please calculate the mortgage first.');
+        return;
+    }
+
+    // Get input values
+    const homePrice = getInputFloatValue('homePrice');
+    const downPaymentPercent = getInputFloatValue('downPayment');
+    const loanTerm = getInputIntValue('loanTerm');
+    const interestRate = getInputFloatValue('interestRate');
+
+    // Convert percentages to decimal
+    const downPaymentDecimal = downPaymentPercent / 100;
+    const interestRateDecimal = interestRate / 100;
+
+    // Calculate mortgage details
+    const loanAmount = homePrice * (1 - downPaymentDecimal);
+    const numberOfMonths = loanTerm * 12;
+    const monthlyInterestRate = interestRateDecimal / 12;
+    const monthlyPayment = calculateMonthlyPayment(loanAmount, monthlyInterestRate, numberOfMonths);
+
+    // Generate and display amortization schedule
+    generateAmortizationSchedule(loanAmount, monthlyInterestRate, numberOfMonths, monthlyPayment);
+
+    // Show the amortization table and scroll to it
+    const amortizationTableElement = document.getElementById('amortizationTable');
+    amortizationTableElement.style.display = 'block';
+    amortizationTableElement.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Function to generate amortization schedule rows
+function generateAmortizationSchedule(loanAmount, monthlyInterestRate, numberOfMonths, monthlyPayment) {
+    const tableBody = document.querySelector('#amortizationTable tbody');
+    tableBody.innerHTML = ''; // Clear existing table rows
+
+    let balance = loanAmount;
+    for (let month = 1; month <= numberOfMonths; month++) {
+        const interest = balance * monthlyInterestRate;
+        const principal = monthlyPayment - interest;
+        balance -= principal;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${month}</td>
+            <td>${formatCurrency(monthlyPayment)}</td>
+            <td>${formatCurrency(interest)}</td>
+            <td>${formatCurrency(principal)}</td>
+            <td>${formatCurrency(balance)}</td>
+        `;
+        tableBody.appendChild(row);
+    }
+}
+
+// Helper function to clear previous results
+function clearResults() {
+    const resultFields = ['homeCost', 'downPaymentAmt', 'loanAmount', 'monthlyPayment', 'MortgageAmount', 'interestAmount'];
+    resultFields.forEach(field => {
+        document.getElementById(field).textContent = 'NaN';
+    });
+}
+
+// Helper function to display results with thousands separators
+function displayResults(results) {
+    Object.keys(results).forEach(key => {
+        const value = results[key];
+        document.getElementById(key).textContent = formatCurrency(value);
+    });
+}
+
+// Helper function to get float value from input
+function getInputFloatValue(id) {
+    return parseFloat(document.getElementById(id).value.replace(/,/g, ''));
+}
+
+// Helper function to get integer value from input
+function getInputIntValue(id) {
+    return parseInt(document.getElementById(id).value.replace(/,/g, ''));
+}
+
+// Helper function to format currency with thousands separator
+function formatCurrency(amount) {
+    return amount.toLocaleString('en-US', { maximumFractionDigits: 2 });
 }
