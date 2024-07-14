@@ -41,9 +41,11 @@
                 </div>
                 <div class="Buttons">
                     <input type="button" value="Calculate" onclick="calculateMortgage()" class="EqualOperator">
+                    <input type="button" value="Amortization" onclick="generateAmortizationTable()"
+                        class="EqualOperator">
                 </div>
             </form>
-            <div id="results" class="Results"> <!--style="display:none;">-->
+            <div id="results" class="Results">
                 <h2 class="Head1">Mortgage Summary</h2>
                 <h2 class="Head2">(excluding tax and insurance)</h2>
                 <table>
@@ -71,6 +73,23 @@
                         <td>Interest Amount:</td>
                         <td id="interestAmount">NaN</td>
                     </tr>
+                </table>
+            </div>
+            <div id="amortizationTable" class="Results" style="display:none;">
+                <h2 class="Head1">Amortization Schedule</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Installment</th>
+                            <th>Interest</th>
+                            <th>Principal</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Amortization schedule rows will be added here dynamically -->
+                    </tbody>
                 </table>
             </div>
         </div>
