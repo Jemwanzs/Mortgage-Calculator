@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
     <div class="Container">
         <div class="Calculator">
             <form id="mortgage-form">
@@ -20,74 +19,62 @@
                 </div>
                 <div class="FormRow">
                     <div class="FormItem">
-                        <label for="homePrice">Property/Home Price</label>
-                        <input type="number" id="homePrice" name="homePrice" required>
+                        <label for="homePrice">Property Price</label>
+                        <input type="text" id="homePrice" name="homePrice" required oninput="formatNumberInput(this)">
                     </div>
                     <div class="FormItem">
-                        <label for="downPayment">Downpayment</label>
-                        <input type="number" id="downPayment" name="downPayment" required>
+                        <label for="downPayment">Down Payment (%)</label>
+                        <input type="text" step="0.01" id="downPayment" name="downPayment" required max="100"
+                            oninput="formatNumberInput(this)">
                     </div>
+                </div>
+                <div class="FormRow">
                     <div class="FormItem">
                         <label for="loanTerm">Loan Term (years)</label>
-                        <input type="number" id="loanTerm" name="loanTerm" required>
-                    </div>
-                </div>
-                <div class="FormRow">
-                    <div class="FormItem">
-                        <label for="interestRate">Interest Rate (p.a)</label>
-                        <input type="number" step="0.01" id="interestRate" name="interestRate" required>
+                        <input type="text" id="loanTerm" name="loanTerm" required oninput="formatNumberInput(this)">
                     </div>
                     <div class="FormItem">
-                        <label for="startDate">Start Date</label>
-                        <input type="date" id="startDate" name="startDate" required>
-                    </div>
-                    <div class="FormItem">
-                        <label for="taxRate">Tax Rate (%)</label>
-                        <input type="number" step="0.01" id="taxRate" name="taxRate" required>
-                    </div>
-                </div>
-                <div class="FormRow">
-                    <div class="FormItem">
-                        <label for="insurance">Insurance</label>
-                        <input type="number" id="insurance" name="insurance" required>
-                    </div>
-                    <div class="FormItem">
-                        <label for="otherCosts">Other Costs/Expenses</label>
-                        <input type="number" id="otherCosts" name="otherCosts" required>
+                        <label for="interestRate">Interest Rate (% p.a)</label>
+                        <input type="text" step="0.01" id="interestRate" name="interestRate" required max="100"
+                            oninput="formatNumberInput(this)">
                     </div>
                 </div>
                 <div class="Buttons">
-                    <input type="button" value="Calculate" onclick="calculateMortgage()" class="Equal Operator">
+                    <input type="button" value="Calculate" onclick="calculateMortgage()" class="EqualOperator">
                 </div>
             </form>
-            <div id="results" class="Results" style="display:none;">
-                <h2>Mortgage Summary</h2>
+            <div id="results" class="Results"> <!--style="display:none;">-->
+                <h2 class="Head1">Mortgage Summary</h2>
+                <h2 class="Head2">(excluding tax and insurance)</h2>
                 <table>
                     <tr>
-                        <td>Monthly Mortgage Payment:</td>
-                        <td id="monthlyPayment"></td>
+                        <td>Home Price:</td>
+                        <td id="homeCost">NaN</td>
                     </tr>
                     <tr>
-                        <td>Monthly Tax Amount:</td>
-                        <td id="taxAmountMonthly"></td>
+                        <td>Down Payment:</td>
+                        <td id="downPaymentAmt">NaN</td>
                     </tr>
                     <tr>
-                        <td>Monthly Insurance Cost:</td>
-                        <td id="insuranceCostMonthly"></td>
+                        <td>Amount Financed:</td>
+                        <td id="loanAmount">NaN</td>
+                    </tr>
+                    <tr class="highlight-row">
+                        <td>Monthly Payment:</td>
+                        <td id="monthlyPayment">NaN</td>
                     </tr>
                     <tr>
-                        <td>Monthly Other Costs:</td>
-                        <td id="otherCostsMonthly"></td>
+                        <td>Total Mortgage:</td>
+                        <td id="MortgageAmount">NaN</td>
                     </tr>
                     <tr>
-                        <td>Total Cost over Loan Term:</td>
-                        <td id="totalCost"></td>
+                        <td>Interest Amount:</td>
+                        <td id="interestAmount">NaN</td>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 
