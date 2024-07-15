@@ -143,3 +143,21 @@ function getInputIntValue(id) {
 function formatCurrency(amount) {
     return amount.toLocaleString('en-US', { maximumFractionDigits: 2 });
 }
+
+// Helper function to format input fields with comma separators
+function formatInputFieldWithCommas(inputElement) {
+    inputElement.addEventListener('input', function () {
+        const value = inputElement.value.replace(/,/g, '');
+        if (!isNaN(value)) {
+            inputElement.value = parseFloat(value).toLocaleString('en-US');
+        }
+    });
+}
+
+// Apply formatting to input fields
+document.addEventListener('DOMContentLoaded', function () {
+    formatInputFieldWithCommas(document.getElementById('homePrice'));
+    formatInputFieldWithCommas(document.getElementById('downPayment'));
+    formatInputFieldWithCommas(document.getElementById('loanTerm'));
+    formatInputFieldWithCommas(document.getElementById('interestRate'));
+});
