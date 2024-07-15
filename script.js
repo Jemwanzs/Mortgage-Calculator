@@ -154,6 +154,11 @@ function formatInputFieldWithCommas(inputElement) {
     });
 }
 
+//Function to Open Link
+function openSimpleCalculator() {
+    window.open('https://jemwanzs.github.io/Simple-Calculator1/', '_blank');
+}
+
 // Apply formatting to input fields
 document.addEventListener('DOMContentLoaded', function () {
     formatInputFieldWithCommas(document.getElementById('homePrice'));
