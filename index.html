@@ -8,6 +8,9 @@
 </head>
 
 <body>
+    <div id="orientationMessage" class="OrientationMessage" style="display: none;">
+        Please rotate your device for a better experience.
+    </div>
     <div class="Container">
         <div class="Calculator">
             <form id="mortgage-form">
@@ -97,6 +100,19 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script>
+        function checkOrientation() {
+            const orientationMessage = document.getElementById('orientationMessage');
+            if (window.innerHeight > window.innerWidth) {
+                orientationMessage.style.display = 'block';
+            } else {
+                orientationMessage.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('load', checkOrientation);
+    </script>
 </body>
 
 </html>
