@@ -153,6 +153,19 @@ form .Title {
     font-style: italic;
 }
 
+.OrientationMessage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffcc00;
+    color: #000;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    z-index: 1000;
+}
+
 .highlight-row {
     font-weight: bold;
     color: yellow;
