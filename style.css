@@ -84,38 +84,18 @@ html {
 .Calculator form input.EqualOperator {
     padding: 10px;
     font-size: 18px;
-    color: white;
+    color: #151d88;
     font-weight: bold;
     cursor: pointer;
-    border-radius: 5px;
-    background-color: #629650;
-    /*box-shadow: 3px 3px 5px #f0f0f0, -3px -3px 5px rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease;*/
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    box-shadow: 3px 3px 5px #f0f0f0, -3px -3px 5px rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
 }
 
 .Calculator form input.EqualOperator:hover {
     background-color: #e0e0e0;
-    /*box-shadow: 5px 5px 7px #f0f0f0, -5px -5px 7px rgba(255, 255, 255, 0.6);*/
-}
-
-.EqualOperator2 {
-    padding: 5px;
-    font-size: 18px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 5px;
-    background-color: #629650;
-}
-
-.EqualOperator3 {
-    padding: 5px;
-    font-size: 10px;
-    color: white;
-    font-weight: lighter;
-    cursor: pointer;
-    border-radius: 5px;
-    background-color: #629650;
+    box-shadow: 5px 5px 7px #f0f0f0, -5px -5px 7px rgba(255, 255, 255, 0.6);
 }
 
 .Results {
@@ -151,19 +131,6 @@ form .Title {
     color: aqua;
     margin-top: 0;
     font-style: italic;
-}
-
-.OrientationMessage {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #ffcc00;
-    color: #000;
-    text-align: center;
-    padding: 10px;
-    font-size: 16px;
-    z-index: 1000;
 }
 
 .highlight-row {
