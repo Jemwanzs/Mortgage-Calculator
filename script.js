@@ -3,13 +3,16 @@ function calculateMortgage() {
     // Clear previous results
     clearResults();
 
+    // Hide amortization table if it's open
+    hideAmortizationTable();
+
     // Get input values
     const homePrice = getInputFloatValue('homePrice');
     const downPaymentPercent = getInputFloatValue('downPayment');
     const loanTerm = getInputIntValue('loanTerm');
     const interestRate = getInputFloatValue('interestRate');
 
-    // Validate inputs
+    // ***Validate inputs
     if (isNaN(homePrice) || isNaN(downPaymentPercent) || isNaN(loanTerm) || isNaN(interestRate)) {
         alert('Please enter valid numeric inputs.');
         return;
@@ -85,9 +88,7 @@ function generateAmortizationTable() {
     generateAmortizationSchedule(loanAmount, monthlyInterestRate, numberOfMonths, monthlyPayment);
 
     // Show the amortization table and scroll to it
-    const amortizationTableElement = document.getElementById('amortizationTable');
-    amortizationTableElement.style.display = 'block';
-    amortizationTableElement.scrollIntoView({ behavior: 'smooth' });
+    showAmortizationTable();
 }
 
 // Function to generate amortization schedule rows
@@ -144,19 +145,16 @@ function formatCurrency(amount) {
     return amount.toLocaleString('en-US', { maximumFractionDigits: 2 });
 }
 
-// Helper function to format input fields with comma separators
-function formatInputFieldWithCommas(inputElement) {
-    inputElement.addEventListener('input', function () {
-        const value = inputElement.value.replace(/,/g, '');
-        if (!isNaN(value)) {
-            inputElement.value = parseFloat(value).toLocaleString('en-US');
-        }
-    });
+// Function to hide the amortization table
+function hideAmortizationTable() {
+    const amortizationTableElement = document.getElementById('amortizationTable');
+    amortizationTableElement.style.display = 'none';
 }
 
-//Function to Open Link
-function openSimpleCalculator() {
-    window.open('https://jemwanzs.github.io/Simple-Calculator1/', '_blank');
+// Function to show the amortization table
+function showAmortizationTable() {
+    const amortizationTableElement = document.getElementById('amortizationTable');
+    amortizationTableElement.style.display = 'block';
 }
 
 // Apply formatting to input fields
@@ -166,3 +164,13 @@ document.addEventListener('DOMContentLoaded', function () {
     formatInputFieldWithCommas(document.getElementById('loanTerm'));
     formatInputFieldWithCommas(document.getElementById('interestRate'));
 });
+
+// Helper function to format input fields with comma separators
+function formatInputFieldWithCommas(inputElement) {
+    inputElement.addEventListener('input', function () {
+        const value = inputElement.value.replace(/,/g, '');
+        if (!isNaN(value)) {
+            inputElement.value = parseFloat(value).toLocaleString('en-US');
+        }
+    });
+}
